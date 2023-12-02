@@ -1,4 +1,5 @@
 import { fetchImages } from './api/fetch-api.js';
+import { createMarkup } from './api/createMarkup.js';
 
 const form = document.querySelector('.search-form');
 const gallery = document.querySelector('.gallery');
@@ -25,33 +26,6 @@ function onHandleSubmit(e) {
   .catch(err => console.log(err));
 }
 
-function createMarkup(arr) {
-  return arr.map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => {
-      return `
-    <div class='photo-card'>
-      <img src='${webformatURL}' alt='${tags}' loading='lazy' />
-      <div class='info'>
-        <p class='info-item'>
-          <b>Likes</b>
-          ${likes}
-        </p>
-        <p class='info-item'>
-          <b>Views</b>
-          ${views}
-        </p>
-        <p class='info-item'>
-          <b>Comments</b>
-          ${comments}
-        </p>
-        <p class='info-item'>
-          <b>Downloads</b>
-          ${downloads}
-        </p>
-      </div>
-    </div>
-  `;
-    }
-  )
-}
+
 
 form.addEventListener('submit', onHandleSubmit);
