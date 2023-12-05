@@ -1,7 +1,17 @@
 import axios from 'axios';
-import { API_KEY, BASE_URL, PAGINATION } from './keys.js';
+import { API_KEY, BASE_URL, PER_PAGE } from './keys.js';
 
-export const fetchImages = async (query) => {
-  const res = await axios(`${BASE_URL}?key=${API_KEY}&q=${query}&image_type=photo&orientation=horizontal&safesearch=true&${PAGINATION}`);
+export const fetchImages = async (query, page) => {
+  const res = await axios(`${BASE_URL}`, {
+    params: {
+      key: API_KEY,
+      q: query,
+      image_type: 'photo',
+      orientation: 'horizontal',
+      safesearch: true,
+      page,
+      per_page: PER_PAGE,
+    },
+  });
   return res.data;
-}
+};
