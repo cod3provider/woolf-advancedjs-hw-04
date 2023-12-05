@@ -9,7 +9,6 @@ const form = document.querySelector('.search-form');
 const gallery = document.querySelector('.gallery');
 const loadMoreBtn = document.querySelector('.load-more');
 
-
 loadMoreBtn.classList.add('hidden');
 
 let numberPage = 1;
@@ -34,8 +33,6 @@ function onHandleSubmit(e) {
 
   fetchImages(query, numberPage)
   .then(data => {
-    console.log(data);
-
     if (!data.totalHits) {
       toastError();
       return;
@@ -68,7 +65,6 @@ export async function loadMore() {
 
   isLoading = true;
   numberPage += 1;
-  // console.log(numberPage);
 
   const searchQuery = form.elements.searchQuery.value.trim();
   const data = await fetchImages(searchQuery, numberPage + 1);
@@ -91,7 +87,7 @@ export async function loadMore() {
 
 window.addEventListener('scroll', () => {
   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-  
+
   if (clientHeight + scrollTop >= scrollHeight * 0.9) {
     loadMore();
   }
