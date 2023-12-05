@@ -1,4 +1,5 @@
 import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 import { fetchImages } from './api/fetch-api.js';
 import { createMarkup } from './api/createMarkup.js';
 import { endOfResultsInfo, toastError, toastFoundedImages, toastInfoSearch } from './api/toasts.js';
@@ -13,6 +14,11 @@ loadMoreBtn.classList.add('hidden');
 
 let numberPage = 1;
 let existSearchQuery;
+
+let lightbox;
+
+form.addEventListener('submit', onHandleSubmit);
+loadMoreBtn.addEventListener('click', loadMore);
 
 function onHandleSubmit(e) {
   e.preventDefault();
@@ -48,15 +54,12 @@ function onHandleSubmit(e) {
     }
     const markup = createMarkup(data.hits);
     gallery.insertAdjacentHTML('afterbegin', markup);
+    lightbox = new SimpleLightbox(`.gallery a`);
   })
   .catch(err => {
     console.log(err);
   });
 }
-
-
-form.addEventListener('submit', onHandleSubmit);
-loadMoreBtn.addEventListener('click', loadMore);
 
 export async function loadMore() {
   numberPage += 1;
@@ -66,7 +69,15 @@ export async function loadMore() {
   const data = await fetchImages(searchQuery, numberPage + 1);
 
   gallery.insertAdjacentHTML('beforeend', createMarkup(data.hits));
+  lightbox.refresh();
   loadMoreBtn.classList.remove('hidden');
-}
 
-const lightbox = new SimpleLightbox(`${gallery}`, { /* options */ });
+  const { height: cardHeight } = document
+  .querySelector(".gallery")
+  .firstElementChild.getBoundingClientRect();
+
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: "smooth",
+  });
+}
