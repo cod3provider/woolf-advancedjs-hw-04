@@ -1,13 +1,12 @@
 
 import { fetchImages } from './api/fetch-api.js';
 import { createMarkup } from './api/createMarkup.js';
-import { errorToast } from './api/errorToast.js';
-import iziToast from 'izitoast';
+import { endOfResultsInfo, toastError, toastFoundedImages, toastInfoSearch } from './api/toasts.js';
 import { PER_PAGE } from './api/keys.js';
 
 const form = document.querySelector('.search-form');
 const gallery = document.querySelector('.gallery');
-const searchBtn = document.querySelector('.search-button');
+// const searchBtn = document.querySelector('.search-button');
 const loadMoreBtn = document.querySelector('.load-more');
 
 loadMoreBtn.classList.add('hidden');
@@ -21,7 +20,7 @@ function onHandleSubmit(e) {
   const query = e.currentTarget.elements.searchQuery.value.trim();
 
   if (query === existSearchQuery) {
-    iziToast.info({ message: "❗️For an another search, enter new query!" });
+    toastInfoSearch();
     return;
   }
   gallery.innerHTML = '';
@@ -32,16 +31,16 @@ function onHandleSubmit(e) {
     console.log(data);
 
     if (!data.totalHits) {
-      errorToast();
+      toastError();
       return;
     }
 
     if (numberPage === 1) {
-      iziToast.success({message: `Hooray! We found ${data.totalHits} images.`})
+      toastFoundedImages();
     }
 
     if (data.totalHits <= numberPage * PER_PAGE) {
-      iziToast.info({ message: 'We\'re sorry, but you\'ve reached the end of search results.' });
+      endOfResultsInfo();
     }
 
     if (data.totalHits > numberPage * PER_PAGE) {
