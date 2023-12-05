@@ -15,7 +15,7 @@ export function toastInfoSearch() {
   });
 }
 
-export function toastFoundedImages() {
+export function toastFoundedImages(data) {
   iziToast.success({
     position: 'topRight',
     message: `Hooray! We found ${data.totalHits} images.`

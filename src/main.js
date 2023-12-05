@@ -1,4 +1,4 @@
-
+import SimpleLightbox from "simplelightbox";
 import { fetchImages } from './api/fetch-api.js';
 import { createMarkup } from './api/createMarkup.js';
 import { endOfResultsInfo, toastError, toastFoundedImages, toastInfoSearch } from './api/toasts.js';
@@ -36,7 +36,7 @@ function onHandleSubmit(e) {
     }
 
     if (numberPage === 1) {
-      toastFoundedImages();
+      toastFoundedImages(data);
     }
 
     if (data.totalHits <= numberPage * PER_PAGE) {
@@ -68,3 +68,5 @@ export async function loadMore() {
   gallery.insertAdjacentHTML('beforeend', createMarkup(data.hits));
   loadMoreBtn.classList.remove('hidden');
 }
+
+const lightbox = new SimpleLightbox(`${gallery}`, { /* options */ });
