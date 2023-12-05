@@ -7,22 +7,22 @@ import { PER_PAGE } from './api/keys.js';
 
 const form = document.querySelector('.search-form');
 const gallery = document.querySelector('.gallery');
-// const searchBtn = document.querySelector('.search-button');
 const loadMoreBtn = document.querySelector('.load-more');
+
 
 loadMoreBtn.classList.add('hidden');
 
 let numberPage = 1;
 let existSearchQuery;
-
 let lightbox;
+let isLoading = false;
 
 form.addEventListener('submit', onHandleSubmit);
-loadMoreBtn.addEventListener('click', loadMore);
+// loadMoreBtn.addEventListener('click', loadMore);
 
 function onHandleSubmit(e) {
   e.preventDefault();
-  loadMoreBtn.classList.add('hidden');
+  // loadMoreBtn.classList.add('hidden');
   const query = e.currentTarget.elements.searchQuery.value.trim();
 
   if (query === existSearchQuery) {
@@ -49,9 +49,9 @@ function onHandleSubmit(e) {
       endOfResultsInfo();
     }
 
-    if (data.totalHits > numberPage * PER_PAGE) {
-      loadMoreBtn.classList.remove('hidden');
-    }
+    // if (data.totalHits > numberPage * PER_PAGE) {
+    //   loadMoreBtn.classList.remove('hidden');
+    // }
     const markup = createMarkup(data.hits);
     gallery.insertAdjacentHTML('afterbegin', markup);
     lightbox = new SimpleLightbox(`.gallery a`);
@@ -62,6 +62,11 @@ function onHandleSubmit(e) {
 }
 
 export async function loadMore() {
+  if (isLoading) {
+    return;
+  }
+
+  isLoading = true;
   numberPage += 1;
   // console.log(numberPage);
 
@@ -70,7 +75,7 @@ export async function loadMore() {
 
   gallery.insertAdjacentHTML('beforeend', createMarkup(data.hits));
   lightbox.refresh();
-  loadMoreBtn.classList.remove('hidden');
+  // loadMoreBtn.classList.remove('hidden');
 
   const { height: cardHeight } = document
   .querySelector(".gallery")
@@ -80,4 +85,14 @@ export async function loadMore() {
     top: cardHeight * 2,
     behavior: "smooth",
   });
+
+  isLoading = false;
 }
+
+window.addEventListener('scroll', () => {
+  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+  
+  if (clientHeight + scrollTop >= scrollHeight * 0.9) {
+    loadMore();
+  }
+});
