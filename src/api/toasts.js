@@ -8,6 +8,13 @@ export function toastError () {
   });
 }
 
+export function toastEnterSearch() {
+  iziToast.warning({
+    position: 'topRight',
+    message: 'You need enter your request query'
+  })
+}
+
 export function toastInfoSearch() {
   iziToast.info({
     position: 'topRight',
