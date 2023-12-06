@@ -2,7 +2,7 @@ import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 import { fetchImages } from './api/fetch-api.js';
 import { createMarkup } from './api/createMarkup.js';
-import { endOfResultsInfo, toastError, toastFoundedImages, toastInfoSearch } from './api/toasts.js';
+import { endOfResultsInfo, toastEnterSearch, toastError, toastFoundedImages, toastInfoSearch } from './api/toasts.js';
 import { PER_PAGE } from './api/keys.js';
 
 const form = document.querySelector('.search-form');
@@ -17,12 +17,17 @@ let lightbox;
 let isLoading = false;
 
 form.addEventListener('submit', onHandleSubmit);
-// loadMoreBtn.addEventListener('click', loadMore);
+loadMoreBtn.addEventListener('click', loadMore);
 
 function onHandleSubmit(e) {
   e.preventDefault();
-  // loadMoreBtn.classList.add('hidden');
+  loadMoreBtn.classList.add('hidden');
   const query = e.currentTarget.elements.searchQuery.value.trim();
+
+  if (query === '') {
+    toastEnterSearch();
+    return;
+  }
 
   if (query === existSearchQuery) {
     toastInfoSearch();
@@ -46,9 +51,9 @@ function onHandleSubmit(e) {
       endOfResultsInfo();
     }
 
-    // if (data.totalHits > numberPage * PER_PAGE) {
-    //   loadMoreBtn.classList.remove('hidden');
-    // }
+    if (data.totalHits > numberPage * PER_PAGE) {
+      loadMoreBtn.classList.remove('hidden');
+    }
     const markup = createMarkup(data.hits);
     gallery.insertAdjacentHTML('afterbegin', markup);
     lightbox = new SimpleLightbox(`.gallery a`);
@@ -71,7 +76,7 @@ export async function loadMore() {
 
   gallery.insertAdjacentHTML('beforeend', createMarkup(data.hits));
   lightbox.refresh();
-  // loadMoreBtn.classList.remove('hidden');
+  loadMoreBtn.classList.remove('hidden');
 
   const { height: cardHeight } = document
   .querySelector(".gallery")
@@ -85,10 +90,10 @@ export async function loadMore() {
   isLoading = false;
 }
 
-window.addEventListener('scroll', () => {
-  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-
-  if (clientHeight + scrollTop >= scrollHeight * 0.9) {
-    loadMore();
-  }
-});
+// window.addEventListener('scroll', () => {
+//   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+//
+//   if (clientHeight + scrollTop >= scrollHeight * 0.9) {
+//     loadMore();
+//   }
+// });
