@@ -26,6 +26,7 @@
 
 body {
   margin: 0;
+  padding: 10px 16px 50px;
 }
 
 header {
@@ -109,6 +110,24 @@ input[name="searchQuery"] {
 
 .info {
   padding: 10px;
+}
+
+.load-more {
+  display: block;
+  margin: 20px auto 0;
+  padding: 12px 24px;
+  font-size: 20px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background-color: #5bc0f3;
+  box-shadow: rgba(0, 0, 0, 0.35) 0 5px 15px;
+  transition: box-shadow 250ms linear, background-color 250ms linear, color 250ms linear;
+}
+
+.load-more:hover {
+  box-shadow: rgba(3, 102, 214, 0.3) 0 0 0 3px;
+  background-color: #4292bb;
+  color: #c7d3e0;
 }
 
 .hidden {
