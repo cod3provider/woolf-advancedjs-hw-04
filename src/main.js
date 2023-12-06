@@ -69,10 +69,10 @@ export async function loadMore() {
   }
 
   isLoading = true;
-  numberPage += 1;
+  // numberPage += 1;
 
   const searchQuery = form.elements.searchQuery.value.trim();
-  const data = await fetchImages(searchQuery, numberPage + 1);
+  const data = await fetchImages(searchQuery, numberPage += 1);
 
   gallery.insertAdjacentHTML('beforeend', createMarkup(data.hits));
   lightbox.refresh();
