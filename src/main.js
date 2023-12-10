@@ -53,6 +53,8 @@ async function onHandleSubmit(e) {
   if (numberPage === 1) {
     toastFoundedImages(data);
   }
+    console.log(numberPage * PER_PAGE);
+  console.log(data.totalHits);
 
   if (data.totalHits <= numberPage * PER_PAGE) {
     endOfResultsInfo();
@@ -77,6 +79,11 @@ export async function loadMore() {
   gallery.insertAdjacentHTML('beforeend', createMarkup(data.hits));
   lightbox.refresh();
   loadMoreBtn.classList.remove('hidden');
+
+  if (data.totalHits <= numberPage * PER_PAGE) {
+    loadMoreBtn.classList.add('hidden');
+    endOfResultsInfo();
+  }
 
   const { height: cardHeight } = document
   .querySelector('.gallery')
